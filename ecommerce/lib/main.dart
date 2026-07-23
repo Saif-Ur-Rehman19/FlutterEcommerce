@@ -44,18 +44,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    late Widget widget;
-    if (isLoadig) {
-      widget = const Scaffold(body: Center(child: CircularProgressIndicator()));
-    } else if (Provider.of<UserProvider>(context).user.token.isNotEmpty) {
-      if (Provider.of<UserProvider>(context).user == 'user') {
-        widget = const BottomBar();
-      } else {
-        widget = AdminScreen();
-      }
-    } else {
-      widget = const AuthScreen();
-    }
     return MaterialApp(
       title: 'Flutter Ecommerce',
       theme: ThemeData(
@@ -87,7 +75,11 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: widget,
+      home:  Provider.of<UserProvider>(context).user.token.isNotEmpty
+          ? Provider.of<UserProvider>(context).user.type == 'user'
+              ? const BottomBar()
+              : const AdminScreen()
+          : const AuthScreen(),
     );
   }
 }
